@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHI-IRI Post Test | V. Mapa High School</title>
+    <style>
+        :root { 
+            --vmhs-blue: #1A47B8; 
+            --vmhs-gold: #FCD116; 
+            --vmhs-light: #f0f4ff; 
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { background: white; max-width: 950px; width: 100%; padding: 40px; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; }
+        
+        .school-header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid var(--vmhs-blue); padding-bottom: 15px; }
+        .school-logo { width: 120px; height: 120px; margin-bottom: 10px; border-radius: 50%; object-fit: contain; }
+        .school-name { font-size: 1.8rem; font-weight: bold; color: var(--vmhs-blue); margin: 0; text-transform: uppercase; }
+        .assessment-title { font-size: 1.2rem; font-weight: bold; color: #000; margin-top: 10px; text-transform: uppercase; background: var(--vmhs-gold); display: inline-block; padding: 8px 25px; border-radius: 5px; }
+        
+        #step-indicator { text-align: right; font-weight: bold; color: var(--vmhs-blue); font-size: 0.9rem; margin-bottom: 10px; text-transform: uppercase; display: none; }
+        .field { display: flex; flex-direction: column; flex: 1; margin-bottom: 15px; }
+        .field label { font-size: 11px; color: #5f6368; font-weight: bold; text-transform: uppercase; margin-bottom: 4px; }
+        .field input, .field select { padding: 12px; border: 1px solid #dadce0; border-radius: 10px; font-size: 14px; width: 100%; box-sizing: border-box; }
+        
+        .row { display: flex; gap: 15px; flex-wrap: wrap; width: 100%; }
+        .mi-field { flex: 0 0 80px; }
+
+        #passage-reference { border: 3px solid var(--vmhs-gold); padding: 35px; border-radius: 15px; line-height: 1.8; font-size: 13pt; font-family: "Comic Sans MS", cursive, sans-serif; background: #fff; margin-bottom: 30px; max-height: 500px; overflow-y: auto; white-space: pre-wrap; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
+        
+        .question-card { background: #fff; padding: 30px; border-radius: 20px; border: 2px solid #eee; text-align: center; }
+        .q-text { font-size: 1.4rem; font-weight: 700; color: #222; margin-bottom: 25px; text-align: left; }
+        .option-btn { padding: 18px; border: 1px solid #dadce0; border-radius: 12px; background: white; cursor: pointer; font-size: 1.1rem; text-align: left; width: 100%; margin-bottom: 10px; transition: 0.2s; }
+        .option-btn:hover { background: var(--vmhs-light); border-color: var(--vmhs-blue); transform: translateX(5px); }
+        
+        .btn-primary { background: var(--vmhs-blue); color: white; padding: 20px; border-radius: 50px; cursor: pointer; border: none; font-weight: bold; width: 100%; text-transform: uppercase; transition: 0.3s; }
+        .btn-primary:hover { background: #0d2b7a; transform: scale(1.01); }
+        .btn-db { background: #28a745; margin-top: 20px; }
+        
+        .summary-card { border: 3px solid var(--vmhs-blue); border-radius: 20px; padding: 30px; margin-bottom: 20px; text-align: center; background: white; }
+        .loader { border: 8px solid #f3f3f3; border-top: 8px solid var(--vmhs-blue); border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .footer { margin-top: 40px; text-align: center; color: var(--vmhs-blue); font-size: 10px; line-height: 1.4; border-top: 1px solid #eee; padding-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="school-header">
+        <img src="VMHS_LOGO.jpg" alt="VMHS Logo" class="school-logo">
+        <p class="school-name">V. Mapa High School</p>
+        <p class="assessment-title">PHI-IRI Post Test</p>
+    </div>
+
+    <div id="setup-page">
+        <h3 style="color: var(--vmhs-blue);">Student Information</h3>
+        <div class="row">
+            <div class="field"><label>LRN NO.</label><input type="text" id="lrn" maxlength="12" placeholder="12-digit LRN"></div>
+            <div class="field"><label>SURNAME</label><input type="text" id="surname"></div>
+        </div>
+        <div class="row">
+            <div class="field"><label>FIRST NAME</label><input type="text" id="firstName"></div>
+            <div class="field mi-field"><label>M.I.</label><input type="text" id="mi" maxlength="2"></div>
+        </div>
+        <div class="row">
+            <div class="field"><label>Grade Level (Enrollment)</label>
+                <select id="studentGrade">
+                    <option value="7">Grade 7</option>
+                    <option value="8">Grade 8</option>
+                    <option value="9">Grade 9</option>
+                    <option value="10">Grade 10</option>
+                </select>
+            </div>
+            <div class="field"><label>Section</label><input type="text" id="section"></div>
+        </div>
+        <button class="btn-primary" onclick="autoStartExam()">Start Assessment</button>
+    </div>
+
+    <div id="transition-step" style="display:none; text-align:center; padding:50px;">
+        <h2 style="color:var(--vmhs-blue);">Analyzing Results...</h2>
+        <div class="loader"></div>
+        <p id="transition-msg" style="font-weight:bold; font-size:1.2rem;"></p>
+    </div>
+
+    <div id="test-step" style="display:none;">
+        <div id="step-indicator"></div>
+        <h2 id="part-label" style="text-align:center; color:var(--vmhs-blue); margin-bottom:15px;"></h2>
+        <div id="passage-reference"></div>
+        <div id="quiz-area"></div>
+    </div>
+
+    <div id="results-step" style="display:none;">
+        <h2 style="text-align:center; color:var(--vmhs-blue); font-size: 2rem; margin-bottom: 30px;">Final Assessment Report</h2>
+        <div id="cumulative-results"></div>
+        <button id="db-btn" class="btn-primary btn-db" onclick="sendToDatabase()">SEND TO PHIL-IRI DATABASE</button>
+    </div>
+
+    <div class="footer">
+        <p style="margin: 2px 0;">This platform is developed and maintained by: <strong>Dianne M. Maure, Giezel P. Busa, Isiash Cassius B. Santiago</strong></p>
+        <p style="margin: 2px 0;">For inquiries, please contact: 
+            <strong>Viber:</strong> +639-XXXX-XXXX | 
+            <strong>Email:</strong> ahsprojectfriend@gmail.com
+        </p>
+        <p style="margin-top: 8px; font-style: italic; opacity: 0.8;">
+            Privacy Note: Data collected (LRN, Names, and Scores) are used exclusively for school assessment records
+            , in compliance with the Data Privacy Act of 2012.
+        </p>
+    </div>
+</div>
+
+<script>
+    // 1. PASTE YOUR GOOGLE APPS SCRIPT URL HERE
+    const FINAL_GS_LINK = "https://script.google.com/macros/s/AKfycbx69GoMZRNrKtNONPS7LozIFdg-vWiq7DF_nm6jTlUF-vHIrYtq4jGF_TLtPRkCzkJQ3g/exec";
+
+    const examData = {
+        4: { title: "MARIAN'S EXPERIMENT", text: "Marian came home from school. She went to the kitchen and saw her mother cooking. 'Mama, do we have mongo seeds?' asked Marian. 'I will do an experiment.' \n\n'Yes, we have some in the cabinet,' answered Mama. \n\nMarian got some seeds and planted them in a wooden box. She watered the seeds every day. She made sure they got enough sun. After three days, Marian was happy to see stems and leaves sprouting. Her mongo seeds grew into young plants.", questions: [
+            { q: "What did Marian look for in the kitchen?", options: ["a. mango seeds", "b. mongo seeds", "c. melon seeds"], correct: 1 },
+            { q: "What did she do with the seeds?", options: ["a. She played with them.", "b. She cooked them.", "c. She planted them."], correct: 2 },
+            { q: "Which of the following events happened last?", options: ["a. Some stems and leaves sprouted from the seeds.", "b. Marian planted the mongo seeds in a wooden box.", "c. Marian watered the soil where the seeds were planted"], correct: 0 },
+            { q: "What did Marian know about planting seeds?", options: ["a. Seeds should be placed in a wooden box in the house.", "b. Seeds grow whether or not one takes care of them.", "c. Seeds need water and sunlight in order to grow"], correct: 2 },
+            { q: "What can one learn from Marian?", options: ["a. It is good to be happy.", "b. It is good to be curious.", "c. It is good to be obedient"], correct: 1 },
+            { q: "Which sentence tells that Marian's experiment was successful?", options: ["A. Mother said there were mongo seeds in the cabinet.", "B. Stems and leaves started to sprout from the seeds.", "C. The mongo seeds had enough water and sunlight."], correct: 1 }
+        ] },
+        5: { title: "TRADING PLACES", text: "On a trip to a university, the driver told the professor, 'I've heard you give this speech many times. I can deliver it for you.' \n\nThe professor said, 'The people in this university haven't seen me yet. Give the lecture. I'll pretend to be your driver.' \n\nWhen they arrived, the driver was introduced to be the professor. He gave an excellent speech. Everybody applauded. Afterwards, somebody asked a question which the driver couldn't answer. In order to get out of the sticky situation, he said, 'Oh, that's such an easy question. Even my driver can give you the answer!'", questions: [
+            { q: "Why did the university invite the professor?", options: ["a. to give a test", "b. to give a lecture", "c. to donate books", "d. to attend classes"], correct: 1 },
+            { q: "Why was it easy for the driver to pretend he was the professor?", options: ["a. The professor looked like the driver.", "b. The driver dressed up like the professor.", "c. The driver was as intelligent as the professor.", "d. The participants have not seen the professor yet."], correct: 3 },
+            { q: "Why was the selection entitled Trading Places?", options: ["a. The driver could answer the question asked.", "b. The professor exchanged roles with the driver.", "c. The driver exchanged seats with the professor.", "d. The professor seated himself with the audience."], correct: 1 },
+            { q: "Based on the selection, how would you describe the professor?", options: ["a. a boring lecturer", "b. an excellent driver", "c. a humorous person", "d. a generous employer"], correct: 2 },
+            { q: "The diver tried to get out of a sticky situation. What was the sticky situation?", options: ["a. A participant recognized the professor.", "b. The driver could not deliver the lecture.", "c. The professor could not move from his seat.", "d. The driver did not know what to answer."], correct: 3 },
+            { q: "Why did the driver say 'Even my driver can give you the answer!'?", options: ["a. to admit that even he did not know how to answer", "b. to stop the audience from asking more questions", "c. to stop the real professor from answering the question", "d. to prove to the participants that the question was easy"], correct: 1 },
+            { q: "He gave a very good speech and everybody applauded. Another word for applauded is...", options: ["a. kept very quiet", "b. started to leave", "c. clapped their hands", "d. asked him to speak louder"], correct: 2 }
+        ] },
+        6: { title: "FLYING ROCKS", text: "There are rocks in our Solar System that never flocked together to form planets. Larger ones called asteroids gather in the Asteroid Belt, a strip found between Mars and Jupiter. Some asteroids don't move along this belt but have paths that bring them close to the earth. These are called Apollo Asteroids. \n\nThere may be half a million asteroids whose diameters are bigger than one kilometer. The largest asteroid is over 1000 kilometers across. It is speculated that many asteroids were once larger but they collided with each other and became small fragments. \n\nUnlike asteroids, meteoroids are small rocky bodies, that are scattered in space and do not orbit the sun. They cross the Earth's orbit and are often seen burning up in the Earth's atmosphere at night. The faint flashes of light they make are called shooting stars.", questions: [
+            { q: "What are asteroids?", options: ["a. Large fragments of rock in the Solar System", "b. Large fragments of rock that circle the moon", "c. Small fragments of rock that do not circle the sun", "d. Small fragments of rock that do not circle the planets"], correct: 0 },
+            { q: "What are meteoroids?", options: ["a. Large fragments of rock that circle the sun", "b. Large fragments of rock that circle the planets", "c. Small bits of rock that do not circle the sun", "d. Small bits of rock that do not cross the planets' orbits"], correct: 2 },
+            { q: "Which among the following statements is NOT true?", options: ["a. Some asteroids move close to the earth.", "b. Large rocks flock together in the Asteroid Belt.", "c. All rocks in our Solar System have formed planets.", "d. The Asteroid Belt is found between Mars and Jupiter."], correct: 2 },
+            { q: "“It is speculated that many asteroids were once larger.” What does the word speculated mean?", options: ["a. written", "b. guessed", "c. confirmed", "d. questioned"], correct: 1 },
+            { q: "What is a possible reason behind the fact that asteroids are not anymore as large as they were first thought to be?", options: ["a. They could have shrunk when they got closer to the sun", "b. They could have hit one another and broken into pieces.", "c. They could have burned up and eventually become smaller.", "d. They could have rammed into some planet and broken apart"], correct: 1 },
+            { q: "Which of the following statements is TRUE of asteroids and meteoroids?", options: ["a. Both asteroids and meteoroids can be seen in a belt of rocks between Jupiter and Mars.", "b. Both asteroids and meteoroids circle the Earth and can be seen as faint flashes of light.", "c. Both asteroids and meteoroids are composed of rocky particles found in the Solar System.", "d. Both asteroids and meteoroids are scattered randomly across in space and do not orbit the sun"], correct: 2 },
+            { q: "Many asteroids must have collided with one another. What is a synonym of the word 'collided'?", options: ["a. trapped into", "b. crashed into", "c. converged with", "d. connected with"], correct: 1 },
+            { q: "If you see faint flashes of light in the night sky, which of the following could have happened?", options: ["a. Flames shoot up from the sun and come closer to the earth.", "b. Meteoroids have just crossed the earth's orbit and burned.", "c. Meteoroids have just crossed paths with the sun and burned.", "d. There are moments when the earth orbits a lot closer to the sun."], correct: 1 }
+        ] },
+        7: { title: "THE JEEPNEY: A FILIPINO TRADITION", text: "The jeepney is a popular means for people to travel in the Philippines. After World War II, Filipinos changed the old jeeps left by American soldiers into public vehicles. Today, these brightly colored jeepneys ply every street of the Philippines. Its design is a constant reminder of the Filipinos’ creativity and resourcefulness.\n\nNot only that it is a sight to behold, these jeepneys have been so useful to the mass of Filipinos ever since its inception as a public vehicle. As proof, all throughout the Philippines, there are designated routes and numerous locations for passengers to board and disembark. It’s another thing to be inside the jeepneys. Passengers sit facing each other, making conversations more enjoyable. Hence, for many Filipinos, riding the jeepneys offers them time to socialize conveniently with one another, especially in cities where traffic is unbearable.\n\nHowever, the Filipinos’ beloved jeepney is in danger of being off the road in the near future. According to the government, they want to make the jeepneys safer and better for the environment. They plan to replace old jeepneys with new ones that use electricity or less fuel. The drivers are worried because they might not have enough money to buy these new vehicles as they are more expensive than the old jeepneys.\n\nEven with this threat, the jeepney remains an important part of every Filipino’s life. Long after the Americans have left Philippine soil, its practicality and usefulness continue. People use jeepneys for varied reasons: to go around, visit friends and relatives, go to work, and see new places. It is hard to imagine how life can go on for an ordinary Filipino without the jeepneys. The plan to replace them should be thoughtfully considered.", questions: [
+            { q: "Which of the following is implied in the first paragraph?", options: ["A. One of the things that Filipinos love to do is travelling.", "B. The American soldiers are very generous.", "C. The Filipino version of the jeepney is more creative.", "D. The jeepney is an original product of the Americans."], correct: 2 },
+            { q: "What does “disembark” mean in the sentence?", options: ["A. To book for a vehicle", "B. To get into a vehicle", "C. To get off a vehicle", "D. To wait for a vehicle"], correct: 2 },
+            { q: "What can cause traffic to be unbearable?", options: ["A. When passengers are not facing each other", "B. When there is no one to talk to while travelling", "C. When there is no time to socialize", "D. When vehicles are either slow or not moving"], correct: 3 },
+            { q: "According to the selection, why is the jeepney a popular vehicle among Filipinos?", options: ["A. Because they are brightly colored", "B. Because they are less expensive", "C. Because they can be found everywhere", "D. Because passengers can sit facing each other"], correct: 2 },
+            { q: "What problem may arise from replacing jeepneys with vehicles that run on electricity?", options: ["A. Many drivers will not buy fuel anymore", "B. Many jeepney drivers will have no jobs", "C. More electricity will be consumed", "D. There will be fewer public vehicles"], correct: 1 },
+            { q: "Why is the jeepney called a tradition?", options: ["A. Because people have been riding jeepneys for a very long time", "B. Because jeepneys show Filipinos’ creativity and resourcefulness", "C. Because jeepneys can be seen all over the Philippines", "D. Because jeepneys have many uses for the people"], correct: 0 },
+            { q: "What fact is presented in the selection?", options: ["A. Filipinos love to socialize while travelling around", "B. Many Filipinos use public utility vehicles like jeepneys", "C. Filipinos are very creative and resourceful", "D. The government cares for the safety of the environment"], correct: 1 },
+            { q: "Which of the following is based on the author’s observation?", options: ["A. Filipinos changed the jeeps left by Americans after the war", "B. The government wants to make jeepneys safer and better", "C. The jeepney is a popular means of travel among Filipinos", "D. New vehicles are more expensive than jeepneys"], correct: 2 },
+            { q: "What is the purpose of the last paragraph?", options: ["A. To convince people to disagree with the government’s plan", "B. To emphasize the important role of jeepneys in Filipinos’ lives", "C. To enumerate the reasons why jeepneys are useful", "D. To inform people about what happened to the jeeps left by Americans"], correct: 1 },
+            { q: "Which of the following best summarizes the selection?", options: ["A. Americans gave Filipinos their jeeps for public use", "B. Filipinos love jeepneys because they are safe", "C. The government will phase out jeepneys because they are unsafe", "D. The jeepney, a popular vehicle in the Philippines, is in danger of being phased out"], correct: 3 }
+        ] },
+        8: { title: "THE IMPACT OF SOCIAL MEDIA ON COMMUNICATION", text: "Social media has changed the way we communicate with each other. It is like having a big town square where everyone can share news and stories instantly. Social media through the Internet has figuratively made the world smaller. All one needs is a gadget. It may be a smartphone, a tablet, or a laptop. Desktops can still be used. Through these devices, people can connect with friends and family members who may be on the far side of the globe.\n\nWhat is even more amazing is that we can make friends from practically everywhere on the planet. It is relatively easy to find common interests because we can easily make exchanges. We can choose to chat or make video calls using a platform of our choice. There is Messenger, Viber, and WhatsApp, to name a few. Chatting has gone a long way since Yahoo Messenger and Skype. And if we want people to be updated about us, there is Facebook, Instagram, and X (formerly known as Twitter).\n\nPersonal communication is not the only one that has changed. Even businesses turn to social media and digital networks to promote and sell their products and to connect with prospective clients and business partners. The Internet becomes a convenient venue for posting business advertisements as it has a wider reach.\n\nBut we are always warned about the dangers of communicating through the Internet. The information that we share becomes public and can be re-shared in either a positive or negative way. We have heard and read about people who become victims of malicious sharing of photos and videos.\n\nWhile we enjoy the ease and convenience of communicating through social media, we should also be aware of these threats. Otherwise, there is always the possibility that we will be part of the statistics of those whose lives are destroyed by oversharing.", questions: [
+            { q: "Why does social media “relatively make the world smaller”?", options: ["A. Family members can communicate anytime.", "B. People can use digital gadgets to communicate.", "C. One does not need to travel to meet people.", "D. We can share news and stories instantly."], correct: 2 },
+            { q: "In the second paragraph, what does the word “exchanges” mean?", options: ["A. conversations", "B. pictures", "C. products", "D. videos"], correct: 0 },
+            { q: "What technique did the author use in communicating the message?", options: ["A. By describing a series of events", "B. By giving examples of platforms", "C. By narrating events in a random manner", "D. By using ordinary and familiar terms"], correct: 3 },
+            { q: "Which of the following information is relevant to the discussion?", options: ["A. Being aware of privacy issues", "B. Choosing the right kind of social media", "C. Communicating using social media", "D. Knowing what to post in social media"], correct: 3 },
+            { q: "Which of the following can be concluded about this article?", options: ["A. Every technological advancement has its advantages and disadvantages.", "B. Internet has become an important part of our lives.", "C. People would always discover ways of improving.", "D. The way we communicate today is far different."], correct: 0 },
+            { q: "Which of the following is NOT discussed in the selection?", options: ["A. The convenience of using different platforms", "B. The importance of using digital gadgets", "C. The statistics of people victimized", "D. The types of communication that take place"], correct: 2 },
+            { q: "What is the importance of the last paragraph?", options: ["A. It contains the topic sentence.", "B. It presents a summary of the article.", "C. It suggests an action to the issue.", "D. It supports the discussions in the article."], correct: 2 },
+            { q: "Who will benefit from reading this article?", options: ["A. Advertisers", "B. People who like making friends", "C. People who love posting about activities", "D. People who use social media to talk to families"], correct: 2 },
+            { q: "What is the general tone of this article?", options: ["A. Critical", "B. Didactic", "C. Scholarly", "D. Straightforward"], correct: 3 },
+            { q: "What is the main purpose of the article?", options: ["A. To inform readers about increasing victims", "B. To persuade readers to be more careful", "C. To remind readers how social media influenced us", "D. To tell about ease and convenience"], correct: 1 }
+        ] },
+        9: { title: "THE RISE OF AI IN EDUCATION", text: "Artificial Intelligence or AI refers to technologies and systems that can accomplish tasks that typically require human intelligence, such as understanding language, recognizing patterns, and solving problems. AI has brought both major opportunities and notable challenges within the education framework.\n\nPersonalized learning is AI’s main benefit. Students’ performances can be analyzed by an AI-based platform, which then determines their learning styles, strengths, and weaknesses and adjusts teaching strategies based on the evaluation. This is helpful when a student needs further preparation or additional lessons in subjects where they are struggling. This increases the effectiveness and inclusivity of education by enabling students to learn at their own pace. AI also saves teachers time by allowing them to automatically grade papers, manage calendars, and respond to basic student questions—tasks that would otherwise require a significant amount of their valuable time.\n\nThere are also disadvantages in using AI in teaching. Student dependence on AI may cause delays in developing critical and creative thinking as well as problem-solving skills. If AI provides solutions too quickly, students may miss out on the learning process. Moreover, AI lacks human emotional intelligence. It gives instant feedback but cannot provide encouragement, empathy, or understanding in the same way that a human teacher can.\n\nIt is common knowledge that AI has the ability to transform education through individualized instruction, adaptive assessments, and improved administrative efficiency. AI-powered technologies can assess large volumes of student data to customize learning paths and instructional materials, potentially increasing student engagement and academic performance. AI can also improve accessibility by offering real-time translation and accommodations for students with disabilities, thereby promoting inclusivity in learning environments around the world.\n\nDespite these advantages, the possible disadvantages and ethical concerns surrounding AI in education should not be ignored. Critics argue that excessive reliance on AI may reduce the value of human teachers, who play a vital role in facilitating face-to-face interactions essential for holistic education. Concerns such as data privacy, biased grading systems, and the digital divide—where not all students have equal access to AI tools—must also be addressed.\n\nDespite the challenges brought by AI in education, there are exciting possibilities. AI can enhance engagement through interactive tools, personalized learning experiences, and valuable data to improve instruction. The challenge lies in integrating AI in a way that complements rather than replaces the essential human aspects of teaching. Ultimately, the key is finding a balance between technological innovation and preserving the critical role teachers play in student growth.", questions: [
+            { q: "What is the meaning of the word “personalization”?", options: ["A. AI provides information about individual learning.", "B. AI saves teachers’ time.", "C. Students choose subjects they like.", "D. Students have more time to prepare."], correct: 0 },
+            { q: "According to the selection, which teacher activity is facilitated by AI?", options: ["A. Developing curriculum", "B. Designing assessments", "C. Grading students’ assignments", "D. Teaching difficult topics"], correct: 2 },
+            { q: "How does AI influence the teaching process?", options: ["A. Instructional decision-making", "B. Repetitive role", "C. Replaces teacher", "D. Eliminates classroom teaching"], correct: 3 },
+            { q: "Why would AI cause educational inequality?", options: ["A. Inaccessible to students with limited resources.", "B. Provides rural students richer resources.", "C. Increases workload.", "D. Too complicated to use."], correct: 0 },
+            { q: "Which is true about AI?", options: ["A. Limitless possibilities for learning.", "B. Enhances thinking automatically.", "C. Completely replace teachers.", "D. Makes teaching unnecessary."], correct: 0 },
+            { q: "Which needs further explanation?", options: ["A. How AI benefits learners with disabilities", "B. How AI delays critical thinking", "C. How AI helps save time", "D. How AI transforms process"], correct: 0 },
+            { q: "What is the author suggesting in the last paragraph?", options: ["A. Use AI without limits", "B. Address the challenges brought by AI", "C. Rely fully on AI", "D. Balance AI use with the teacher’s role"], correct: 3 },
+            { q: "Which organizational technique is used?", options: ["A. Describing common knowledge", "B. Emphasizing data privacy", "C. Enumerating advantages/disadvantages", "D. Giving examples of platforms"], correct: 2 },
+            { q: "What is the general tone?", options: ["A. Didactic", "B. Objective", "C. Urgent", "D. Serious"], correct: 1 },
+            { q: "Which is NOT discussed?", options: ["A. Efficiency", "B. Promoting inclusivity", "C. Hinder face-to-face learning", "D. How AI benefits struggling students"], correct: 3 }
+        ] },
+        10: { title: "EXPLORING NON-MENDELIAN GENETICS", text: "Non-Mendelian genetics encompasses inheritance patterns that deviate from the traditional dominant and recessive allele framework established by Gregor Mendel through his experiments with pea plants. While Mendelian genetics laid the foundation for understanding heredity, many traits in living organisms exhibit more complex inheritance patterns. By exploring non-Mendelian concepts, we gain a deeper appreciation for the diversity of genetic traits present in nature.\n\nOne significant form of non-Mendelian inheritance is incomplete dominance. In this pattern, the offspring display a phenotype that is a blend of traits from both parents. For example, crossing a red flower (RR) with a white flower (WW) results in pink offspring (RW). This shows that neither allele is completely dominant, leading to an intermediate expression of traits.\n\nAnother non-Mendelian concept is codominance, which occurs when both alleles in a heterozygous individual are fully expressed. A well-known example can be seen in certain chicken breeds where black feathers (B) and white feathers (W) are codominant. When crossed, the offspring display both black and white feathers, demonstrating that both alleles contribute equally to the phenotype.\n\nPolygenic inheritance is another type of non-Mendelian inheritance in which multiple genes influence a single trait. Traits such as human height and skin color are controlled by several genes working together. This results in a wide range of phenotypes rather than distinct categories, illustrating the complexity of genetic inheritance beyond simple dominant-recessive relationships.\n\nAdditionally, extranuclear inheritance involves genes located outside the nucleus, primarily in mitochondria or chloroplasts. Mitochondrial DNA is inherited from the mother and can result in traits or diseases that do not follow Mendelian patterns. This type of inheritance helps explain certain genetic conditions passed down through maternal lines.\n\nUnderstanding non-Mendelian genetics is essential in fields such as medicine, agriculture, and evolutionary biology. Recognizing that some genetic traits and disorders arise from multiple genes rather than a single gene improves approaches to treatment, prevention, and research. Overall, non-Mendelian genetics enriches our understanding of heredity and explains the complexity and diversity of life.", questions: [
+            { q: "Diversity synonym?", options: ["A. concepts", "B. patterns", "C. types", "D. variety"], correct: 3 },
+            { q: "Situation Matching Directions: Choose from A (black/white combo), B (blue eyes/curly hair), C (brown skin/height), D (diabetes from grandmother).\n\nQuestion 2: Which is an example of codominance?", options: ["Situation A", "Situation B", "Situation C", "Situation D"], correct: 0 },
+            { q: "Question 3: Which is an example of incomplete dominance?", options: ["Situation A", "Situation B", "Situation C", "Situation D"], correct: 1 },
+            { q: "Question 4: Which is an example of extranuclear inheritance?", options: ["Situation A", "Situation B", "Situation C", "Situation D"], correct: 3 },
+            { q: "Which of the following is an example of codominance?", options: ["A. Black and white skin from both parents", "B. Blue eyes and curly hair from different parents", "C. Brown skin and tall height", "D. Diabetes from maternal line"], correct: 0 },
+            { q: "What is the importance of knowing non-Mendelian genetics?", options: ["A. Challenges Mendel", "B. Disproves Mendel", "C. Expands Mendel", "D. Improves Mendel"], correct: 2 },
+            { q: "What is the purpose of the selection?", options: ["A. Argue against Mendel", "B. Describe different patterns", "C. Inform about limitations", "D. Persuade readers to adopt"], correct: 1 },
+            { q: "Which is NOT discussed?", options: ["A. Complexities", "B. Descriptions of specific conditions", "C. Examples", "D. Significance"], correct: 1 },
+            { q: "Which paragraph contains the topic sentence?", options: ["A. First paragraph", "B. Second paragraph", "C. Fourth paragraph", "D. Last paragraph"], correct: 0 },
+            { q: "How did the author organize ideas?", options: ["A. Comparing", "B. Describing characteristics", "C. Cause-and-effect", "D. Problems"], correct: 1 }
+        ] }
+    };
+
+    let sessionResults = [], queue = [], activeGrade, currentQIdx, currentScore;
+    let totalTestsInSequence = 1;
+    let finalPayload = {};
+
+    function autoStartExam() {
+        const lrn = document.getElementById('lrn').value;
+        if(lrn.length < 10) { alert("Please enter a valid LRN"); return; }
+        activeGrade = parseInt(document.getElementById('studentGrade').value);
+        document.getElementById('setup-page').style.display='none';
+        runGradeSequence(activeGrade);
+    }
+
+    function runGradeSequence(level) {
+        activeGrade = level; currentQIdx = 0; currentScore = 0;
+        document.getElementById('transition-step').style.display = 'none';
+        document.getElementById('test-step').style.display = 'block';
+        document.getElementById('step-indicator').style.display = 'block';
+        updateStepCounter();
+        loadQuestion();
+    }
+
+    function updateStepCounter() {
+        document.getElementById('step-indicator').innerText = `Assessment ${sessionResults.length + 1} of ${totalTestsInSequence}`;
+    }
+
+    function loadQuestion() {
+        const exam = examData[activeGrade]; const q = exam.questions[currentQIdx];
+        document.getElementById('part-label').innerText = `Grade ${activeGrade} Reading Material`;
+        document.getElementById('passage-reference').innerText = exam.text;
+        document.getElementById('quiz-area').innerHTML = `
+            <div class="question-card">
+                <div class="q-text">Q${currentQIdx + 1}: ${q.q}</div>
+                <div class="options-grid">
+                    ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleChoice(${i})">${opt}</button>`).join('')}
+                </div>
+            </div>`;
+        document.getElementById('passage-reference').scrollTop = 0;
+    }
+
+    function handleChoice(idx) {
+        if(idx === examData[activeGrade].questions[currentQIdx].correct) currentScore++;
+        currentQIdx++;
+        if(currentQIdx < examData[activeGrade].questions.length) loadQuestion();
+        else processResults();
+    }
+
+    function processResults() {
+        const total = examData[activeGrade].questions.length;
+        const pct = (currentScore / total);
+        const profile = (pct >= 0.8) ? "Independent" : (pct >= 0.59) ? "Instructional" : "Frustration";
+
+        sessionResults.push({ grade: activeGrade, score: `${currentScore}/${total}`, profile: profile });
+
+        if (sessionResults.length === 1) {
+            if (profile === "Frustration") {
+                if (activeGrade - 3 >= 4) queue.push(activeGrade - 3);
+                if (activeGrade - 2 >= 4) queue.push(activeGrade - 2);
+                if (activeGrade - 1 >= 4) queue.push(activeGrade - 1);
+            } else if (profile === "Instructional") {
+                if (activeGrade - 1 >= 4) queue.push(activeGrade - 1);
+                if (activeGrade + 1 <= 10) queue.push(activeGrade + 1);
+            } else if (profile === "Independent") {
+                if (activeGrade + 1 <= 10) queue.push(activeGrade + 1);
+                if (activeGrade + 2 <= 10) queue.push(activeGrade + 2);
+            }
+            totalTestsInSequence = 1 + queue.length;
+        }
+
+        if (queue.length > 0) {
+            const nextG = queue.shift();
+            showTransition(nextG);
+        } else {
+            showFinalReport();
+        }
+    }
+
+    function showTransition(nextG) {
+        document.getElementById('test-step').style.display = 'none';
+        document.getElementById('transition-step').style.display = 'block';
+        document.getElementById('transition-msg').innerText = `Level Adjusting: Preparing Grade ${nextG} passage...`;
+        setTimeout(() => runGradeSequence(nextG), 2500);
+    }
+
+    function showFinalReport() {
+        document.getElementById('test-step').style.display = 'none';
+        document.getElementById('results-step').style.display = 'block';
+        
+        let html = "";
+        finalPayload = {
+            lrn: document.getElementById('lrn').value,
+            surname: document.getElementById('surname').value,
+            firstName: document.getElementById('firstName').value,
+            mi: document.getElementById('mi').value,
+            enrollmentGrade: document.getElementById('studentGrade').value,
+            section: document.getElementById('section').value
+        };
+
+        sessionResults.forEach(r => {
+            html += `<div class="summary-card">
+                        <h3 style="color:var(--vmhs-blue); margin-top:0;">Grade ${r.grade} Analysis</h3>
+                        <p style="font-weight:bold; color:var(--vmhs-blue); font-size:1.2rem;">${r.profile}</p>
+                        <h1 style="margin:10px 0; font-size:3rem;">${r.score}</h1>
+                     </div>`;
+            finalPayload['g' + r.grade] = r.profile;
+        });
+
+        document.getElementById('cumulative-results').innerHTML = html;
+    }
+
+    async function sendToDatabase() {
+        const btn = document.getElementById('db-btn');
+        btn.innerText = "UPLOADING TO DATABASE...";
+        btn.disabled = true;
+
+        const formData = new URLSearchParams();
+        for (let key in finalPayload) {
+            formData.append(key, finalPayload[key]);
+        }
+
+        try {
+            await fetch(FINAL_GS_LINK, {
+                method: 'POST',
+                mode: 'no-cors', 
+                body: formData.toString(),
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            });
+            btn.innerText = "SUCCESS! RETURNING TO HOME...";
+            btn.style.background = "#6c757d";
+            setTimeout(() => location.reload(), 3000);
+        } catch (e) {
+            alert("Connection error. Please check internet and try again.");
+            btn.innerText = "RETRY SENDING";
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>
