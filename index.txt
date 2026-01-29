@@ -4,114 +4,221 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHI-IRI Post Test | V. Mapa High School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { 
-            --vmhs-blue: #1A47B8; 
-            --vmhs-gold: #FCD116; 
-            --vmhs-light: #f0f4ff; 
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Comic+Neue:wght@400;700&display=swap');
+        
+        :root {
+            --vmhs-blue: #1A47B8;
+            --vmhs-gold: #FCD116;
+            --vmhs-light: #f0f4ff;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { background: white; max-width: 950px; width: 100%; padding: 40px; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; }
-        
-        .school-header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid var(--vmhs-blue); padding-bottom: 15px; }
-        .school-logo { width: 120px; height: 120px; margin-bottom: 10px; border-radius: 50%; object-fit: contain; }
-        .school-name { font-size: 1.8rem; font-weight: bold; color: var(--vmhs-blue); margin: 0; text-transform: uppercase; }
-        .assessment-title { font-size: 1.2rem; font-weight: bold; color: #000; margin-top: 10px; text-transform: uppercase; background: var(--vmhs-gold); display: inline-block; padding: 8px 25px; border-radius: 5px; }
-        
-        #step-indicator { text-align: right; font-weight: bold; color: var(--vmhs-blue); font-size: 0.9rem; margin-bottom: 10px; text-transform: uppercase; display: none; }
-        .field { display: flex; flex-direction: column; flex: 1; margin-bottom: 15px; }
-        .field label { font-size: 11px; color: #5f6368; font-weight: bold; text-transform: uppercase; margin-bottom: 4px; }
-        .field input, .field select { padding: 12px; border: 1px solid #dadce0; border-radius: 10px; font-size: 14px; width: 100%; box-sizing: border-box; }
-        
-        .row { display: flex; gap: 15px; flex-wrap: wrap; width: 100%; }
-        .mi-field { flex: 0 0 80px; }
 
-        #passage-reference { border: 3px solid var(--vmhs-gold); padding: 35px; border-radius: 15px; line-height: 1.8; font-size: 13pt; font-family: "Comic Sans MS", cursive, sans-serif; background: #fff; margin-bottom: 30px; max-height: 500px; overflow-y: auto; white-space: pre-wrap; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
-        
-        .question-card { background: #fff; padding: 30px; border-radius: 20px; border: 2px solid #eee; text-align: center; }
-        .q-text { font-size: 1.4rem; font-weight: 700; color: #222; margin-bottom: 25px; text-align: left; }
-        .option-btn { padding: 18px; border: 1px solid #dadce0; border-radius: 12px; background: white; cursor: pointer; font-size: 1.1rem; text-align: left; width: 100%; margin-bottom: 10px; transition: 0.2s; }
-        .option-btn:hover { background: var(--vmhs-light); border-color: var(--vmhs-blue); transform: translateX(5px); }
-        
-        .btn-primary { background: var(--vmhs-blue); color: white; padding: 20px; border-radius: 50px; cursor: pointer; border: none; font-weight: bold; width: 100%; text-transform: uppercase; transition: 0.3s; }
-        .btn-primary:hover { background: #0d2b7a; transform: scale(1.01); }
-        .btn-db { background: #28a745; margin-top: 20px; }
-        
-        .summary-card { border: 3px solid var(--vmhs-blue); border-radius: 20px; padding: 30px; margin-bottom: 20px; text-align: center; background: white; }
-        .loader { border: 8px solid #f3f3f3; border-top: 8px solid var(--vmhs-blue); border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin: 20px auto; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .comic-font {
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .bg-vmhs-blue { background-color: var(--vmhs-blue); }
+        .text-vmhs-blue { color: var(--vmhs-blue); }
+        .border-vmhs-blue { border-color: var(--vmhs-blue); }
+        .bg-vmhs-gold { background-color: var(--vmhs-gold); }
+        .border-vmhs-gold { border-color: var(--vmhs-gold); }
+
+        .btn-primary {
+            background-color: var(--vmhs-blue);
+            color: white;
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: #0d2b7a;
+            transform: translateY(-1px);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .passage-box {
+            background: white;
+            border: 4px solid var(--vmhs-gold);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .option-card {
+            border: 2px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+        .option-card:hover {
+            border-color: var(--vmhs-blue);
+            background-color: var(--vmhs-light);
+            transform: translateX(4px);
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--vmhs-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .footer { margin-top: 40px; text-align: center; color: var(--vmhs-blue); font-size: 10px; line-height: 1.4; border-top: 1px solid #eee; padding-top: 15px; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col items-center p-4 md:p-8">
 
-<div class="container">
-    <div class="school-header">
-        <img src="VMHS_LOGO.jpg" alt="VMHS Logo" class="school-logo">
-        <p class="school-name">V. Mapa High School</p>
-        <p class="assessment-title">PHI-IRI Post Test</p>
-    </div>
-
-    <div id="setup-page">
-        <h3 style="color: var(--vmhs-blue);">Student Information</h3>
-        <div class="row">
-            <div class="field"><label>LRN NO.</label><input type="text" id="lrn" maxlength="12" placeholder="12-digit LRN"></div>
-            <div class="field"><label>SURNAME</label><input type="text" id="surname"></div>
-        </div>
-        <div class="row">
-            <div class="field"><label>FIRST NAME</label><input type="text" id="firstName"></div>
-            <div class="field mi-field"><label>M.I.</label><input type="text" id="mi" maxlength="2"></div>
-        </div>
-        <div class="row">
-            <div class="field"><label>Grade Level (Enrollment)</label>
-                <select id="studentGrade">
-                    <option value="7">Grade 7</option>
-                    <option value="8">Grade 8</option>
-                    <option value="9">Grade 9</option>
-                    <option value="10">Grade 10</option>
-                </select>
+    <div class="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden mb-8">
+        <!-- Header Section -->
+        <div class="p-6 text-center border-b-4 border-vmhs-blue">
+            <div class="flex flex-col items-center">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4 overflow-hidden border-2 border-gray-200">
+                    <!-- Fallback if image fails -->
+                    <img src="VMHS_LOGO.jpg" alt="VMHS Logo" onerror="this.innerHTML='LOGO'; this.classList.add('p-4','text-xs','text-gray-400')" class="object-contain w-full h-full">
+                </div>
+                <h1 class="text-2xl md:text-3xl font-bold text-vmhs-blue uppercase tracking-tight">V. Mapa High School</h1>
+                <div class="mt-2 bg-vmhs-gold px-6 py-1 rounded-full text-sm font-bold uppercase tracking-widest shadow-sm">
+                    PHI-IRI Post Test
+                </div>
             </div>
-            <div class="field"><label>Section</label><input type="text" id="section"></div>
         </div>
-        <button class="btn-primary" onclick="autoStartExam()">Start Assessment</button>
+
+        <!-- Dynamic Content Area -->
+        <div class="p-6 md:p-10">
+            
+            <!-- Setup Page -->
+            <div id="setup-page" class="space-y-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-2 h-8 bg-vmhs-blue rounded-full"></div>
+                    <h2 class="text-xl font-bold text-gray-800 uppercase">Student Information</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-500 uppercase">LRN No.</label>
+                        <input type="text" id="lrn" maxlength="12" placeholder="12-digit LRN" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-500 uppercase">Surname</label>
+                        <input type="text" id="surname" placeholder="Enter Surname" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-500 uppercase">First Name</label>
+                        <input type="text" id="firstName" placeholder="Enter First Name" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-500 uppercase">M.I.</label>
+                        <input type="text" id="mi" maxlength="2" placeholder="Ex: M." class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-500 uppercase">Grade Level (Enrollment)</label>
+                        <select id="studentGrade" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                            <option value="7">Grade 7</option>
+                            <option value="8">Grade 8</option>
+                            <option value="9">Grade 9</option>
+                            <option value="10">Grade 10</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-500 uppercase">Section</label>
+                        <input type="text" id="section" placeholder="Enter Section" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                </div>
+
+                <div id="setup-error" class="hidden text-red-600 text-sm font-semibold bg-red-50 p-3 rounded-lg border border-red-200"></div>
+
+                <button class="btn-primary w-full py-4 rounded-2xl font-bold uppercase tracking-widest mt-4 shadow-lg" onclick="autoStartExam()">
+                    Start Assessment
+                </button>
+            </div>
+
+            <!-- Transition Step -->
+            <div id="transition-step" class="hidden flex flex-col items-center justify-center py-12 space-y-6">
+                <div class="loader"></div>
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold text-vmhs-blue">Analyzing Performance...</h3>
+                    <p id="transition-msg" class="text-gray-500 font-medium mt-2">Adjusting level based on results.</p>
+                </div>
+            </div>
+
+            <!-- Test Step -->
+            <div id="test-step" class="hidden space-y-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span id="step-indicator" class="text-xs font-bold text-vmhs-blue uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full border border-blue-100"></span>
+                    <span id="part-label" class="text-sm font-bold text-gray-600"></span>
+                </div>
+
+                <div id="passage-reference" class="passage-box comic-font p-6 rounded-2xl text-lg leading-relaxed whitespace-pre-wrap"></div>
+                
+                <div id="quiz-area" class="space-y-4">
+                    <!-- Questions injected here -->
+                </div>
+            </div>
+
+            <!-- Results Step -->
+            <div id="results-step" class="hidden">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-vmhs-blue">Assessment Complete</h2>
+                    <p class="text-gray-500 mt-2">Here is the summary of your reading profile.</p>
+                </div>
+
+                <div id="cumulative-results" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <!-- Result cards injected here -->
+                </div>
+
+                <div id="submit-message" class="hidden mb-6 p-4 rounded-xl text-center font-medium"></div>
+
+                <button id="db-btn" class="btn-primary w-full py-5 rounded-2xl font-bold uppercase tracking-widest shadow-lg flex items-center justify-center gap-3" onclick="sendToDatabase()">
+                    <span>Send to PHIL-IRI Database</span>
+                    <svg id="submit-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    <div id="submit-loader" class="hidden loader !w-5 !h-5 !border-2"></div>
+                </button>
+            </div>
+
+        </div>
     </div>
 
-    <div id="transition-step" style="display:none; text-align:center; padding:50px;">
-        <h2 style="color:var(--vmhs-blue);">Analyzing Results...</h2>
-        <div class="loader"></div>
-        <p id="transition-msg" style="font-weight:bold; font-size:1.2rem;"></p>
-    </div>
-
-    <div id="test-step" style="display:none;">
-        <div id="step-indicator"></div>
-        <h2 id="part-label" style="text-align:center; color:var(--vmhs-blue); margin-bottom:15px;"></h2>
-        <div id="passage-reference"></div>
-        <div id="quiz-area"></div>
-    </div>
-
-    <div id="results-step" style="display:none;">
-        <h2 style="text-align:center; color:var(--vmhs-blue); font-size: 2rem; margin-bottom: 30px;">Final Assessment Report</h2>
-        <div id="cumulative-results"></div>
-        <button id="db-btn" class="btn-primary btn-db" onclick="sendToDatabase()">SEND TO PHIL-IRI DATABASE</button>
-    </div>
-
-    <div class="footer">
-        <p style="margin: 2px 0;">This platform is developed and maintained by: <strong>Dianne M. Maure, Giezel P. Busa, Isiash Cassius B. Santiago</strong></p>
-        <p style="margin: 2px 0;">For inquiries, please contact: 
-            <strong>Viber:</strong> +639-XXXX-XXXX | 
-            <strong>Email:</strong> ahsprojectfriend@gmail.com
+    <!-- Footer Area -->
+    <div class="w-full max-w-4xl text-center space-y-2 text-[10px] md:text-xs text-gray-500 border-t border-gray-200 pt-6 px-4 mb-8">
+        <p class="font-bold text-vmhs-blue uppercase">Research & Development Team</p>
+        <p>Dianne M. Maure • Giezel P. Busa • Isiash Cassius B. Santiago</p>
+        <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 mt-2 font-medium">
+            <span><strong>Viber:</strong> +639-XXXX-XXXX</span>
+            <span><strong>Email:</strong> ahsprojectfriend@gmail.com</span>
+        </div>
+        <p class="italic mt-3 max-w-2xl mx-auto opacity-70">
+            Privacy Disclosure: In compliance with the Data Privacy Act of 2012, all collected student information (LRN, names, and scores) is processed solely for academic assessment and internal school records.
         </p>
-        <p style="margin-top: 8px; font-style: italic; opacity: 0.8;">
-            Privacy Note: Data collected (LRN, Names, and Scores) are used exclusively for school assessment records
-            , in compliance with the Data Privacy Act of 2012.
-        </p>
     </div>
-</div>
+
+    <!-- Custom Message Overlay (Replacing alert) -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+            <h3 id="modal-title" class="text-lg font-bold text-gray-900 mb-2">Message</h3>
+            <p id="modal-text" class="text-gray-600 mb-6"></p>
+            <button onclick="closeModal()" class="w-full py-3 bg-gray-900 text-white rounded-xl font-bold">Close</button>
+        </div>
+    </div>
 
 <script>
-    // 1. PASTE YOUR GOOGLE APPS SCRIPT URL HERE
-    const FINAL_GS_LINK = "https://script.google.com/macros/s/AKfycbx69GoMZRNrKtNONPS7LozIFdg-vWiq7DF_nm6jTlUF-vHIrYtq4jGF_TLtPRkCzkJQ3g/exec";
+    // Configuration
+    const FINAL_GS_LINK = "https://script.google.com/macros/s/AKfycbzAVD1jS6PDQrn_ua99Mm8f7CqPgBo_6thdLc-2zCWrJnj1Gow4gSwA2wf6BXyotgR8/exec";
 
     const examData = {
         4: { title: "MARIAN'S EXPERIMENT", text: "Marian came home from school. She went to the kitchen and saw her mother cooking. 'Mama, do we have mongo seeds?' asked Marian. 'I will do an experiment.' \n\n'Yes, we have some in the cabinet,' answered Mama. \n\nMarian got some seeds and planted them in a wooden box. She watered the seeds every day. She made sure they got enough sun. After three days, Marian was happy to see stems and leaves sprouting. Her mongo seeds grew into young plants.", questions: [
@@ -191,23 +298,56 @@
         ] }
     };
 
-    let sessionResults = [], queue = [], activeGrade, currentQIdx, currentScore;
+    let sessionResults = [];
+    let queue = [];
+    let activeGrade;
+    let currentQIdx;
+    let currentScore;
     let totalTestsInSequence = 1;
     let finalPayload = {};
 
+    function showModal(title, text) {
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-text').innerText = text;
+        document.getElementById('modal-overlay').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('modal-overlay').classList.add('hidden');
+    }
+
     function autoStartExam() {
-        const lrn = document.getElementById('lrn').value;
-        if(lrn.length < 10) { alert("Please enter a valid LRN"); return; }
+        const lrn = document.getElementById('lrn').value.trim();
+        const surname = document.getElementById('surname').value.trim();
+        const first = document.getElementById('firstName').value.trim();
+        const error = document.getElementById('setup-error');
+        
+        error.classList.add('hidden');
+
+        if(lrn.length < 10) { 
+            error.innerText = "Please enter a valid 12-digit LRN.";
+            error.classList.remove('hidden');
+            return; 
+        }
+        if(!surname || !first) {
+            error.innerText = "Please enter your Surname and First Name.";
+            error.classList.remove('hidden');
+            return;
+        }
+
         activeGrade = parseInt(document.getElementById('studentGrade').value);
-        document.getElementById('setup-page').style.display='none';
+        document.getElementById('setup-page').classList.add('hidden');
         runGradeSequence(activeGrade);
     }
 
     function runGradeSequence(level) {
-        activeGrade = level; currentQIdx = 0; currentScore = 0;
-        document.getElementById('transition-step').style.display = 'none';
-        document.getElementById('test-step').style.display = 'block';
-        document.getElementById('step-indicator').style.display = 'block';
+        activeGrade = level; 
+        currentQIdx = 0; 
+        currentScore = 0;
+        
+        document.getElementById('transition-step').classList.add('hidden');
+        document.getElementById('test-step').classList.remove('hidden');
+        
         updateStepCounter();
         loadQuestion();
     }
@@ -217,33 +357,51 @@
     }
 
     function loadQuestion() {
-        const exam = examData[activeGrade]; const q = exam.questions[currentQIdx];
-        document.getElementById('part-label').innerText = `Grade ${activeGrade} Reading Material`;
+        const exam = examData[activeGrade]; 
+        const q = exam.questions[currentQIdx];
+        
+        document.getElementById('part-label').innerText = `Grade ${activeGrade} Material: ${exam.title}`;
         document.getElementById('passage-reference').innerText = exam.text;
+        
         document.getElementById('quiz-area').innerHTML = `
-            <div class="question-card">
-                <div class="q-text">Q${currentQIdx + 1}: ${q.q}</div>
-                <div class="options-grid">
-                    ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleChoice(${i})">${opt}</button>`).join('')}
+            <div class="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div class="p-6 bg-vmhs-light rounded-2xl border-2 border-vmhs-blue/10">
+                    <p class="text-sm font-bold text-vmhs-blue mb-1">Question ${currentQIdx + 1} of ${exam.questions.length}</p>
+                    <h3 class="text-xl font-bold text-gray-800 leading-tight">${q.q}</h3>
+                </div>
+                <div class="grid grid-cols-1 gap-3">
+                    ${q.options.map((opt, i) => `
+                        <button class="option-card w-full p-4 rounded-xl text-left font-medium bg-white" onclick="handleChoice(${i})">
+                            ${opt}
+                        </button>
+                    `).join('')}
                 </div>
             </div>`;
+        
         document.getElementById('passage-reference').scrollTop = 0;
     }
 
     function handleChoice(idx) {
         if(idx === examData[activeGrade].questions[currentQIdx].correct) currentScore++;
         currentQIdx++;
-        if(currentQIdx < examData[activeGrade].questions.length) loadQuestion();
-        else processResults();
+        
+        if(currentQIdx < examData[activeGrade].questions.length) {
+            loadQuestion();
+        } else {
+            processResults();
+        }
     }
 
     function processResults() {
         const total = examData[activeGrade].questions.length;
         const pct = (currentScore / total);
-        const profile = (pct >= 0.8) ? "Independent" : (pct >= 0.59) ? "Instructional" : "Frustration";
+        let profile = "Frustration";
+        if (pct >= 0.8) profile = "Independent";
+        else if (pct >= 0.59) profile = "Instructional";
 
         sessionResults.push({ grade: activeGrade, score: `${currentScore}/${total}`, profile: profile });
 
+        // Logic for branching based on FIRST test
         if (sessionResults.length === 1) {
             if (profile === "Frustration") {
                 if (activeGrade - 3 >= 4) queue.push(activeGrade - 3);
@@ -268,15 +426,15 @@
     }
 
     function showTransition(nextG) {
-        document.getElementById('test-step').style.display = 'none';
-        document.getElementById('transition-step').style.display = 'block';
-        document.getElementById('transition-msg').innerText = `Level Adjusting: Preparing Grade ${nextG} passage...`;
-        setTimeout(() => runGradeSequence(nextG), 2500);
+        document.getElementById('test-step').classList.add('hidden');
+        document.getElementById('transition-step').classList.remove('hidden');
+        document.getElementById('transition-msg').innerText = `Preparing Grade ${nextG} passage...`;
+        setTimeout(() => runGradeSequence(nextG), 2000);
     }
 
     function showFinalReport() {
-        document.getElementById('test-step').style.display = 'none';
-        document.getElementById('results-step').style.display = 'block';
+        document.getElementById('test-step').classList.add('hidden');
+        document.getElementById('results-step').classList.remove('hidden');
         
         let html = "";
         finalPayload = {
@@ -285,15 +443,22 @@
             firstName: document.getElementById('firstName').value,
             mi: document.getElementById('mi').value,
             enrollmentGrade: document.getElementById('studentGrade').value,
-            section: document.getElementById('section').value
+            section: document.getElementById('section').value,
+            timestamp: new Date().toISOString()
         };
 
         sessionResults.forEach(r => {
-            html += `<div class="summary-card">
-                        <h3 style="color:var(--vmhs-blue); margin-top:0;">Grade ${r.grade} Analysis</h3>
-                        <p style="font-weight:bold; color:var(--vmhs-blue); font-size:1.2rem;">${r.profile}</p>
-                        <h1 style="margin:10px 0; font-size:3rem;">${r.score}</h1>
-                     </div>`;
+            const profileColor = r.profile === "Independent" ? "text-green-600 bg-green-50" : 
+                               r.profile === "Instructional" ? "text-blue-600 bg-blue-50" : "text-red-600 bg-red-50";
+            
+            html += `
+                <div class="p-6 bg-white border-2 border-gray-100 rounded-3xl shadow-sm text-center">
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Grade ${r.grade} Level</p>
+                    <div class="text-3xl font-black mb-1">${r.score}</div>
+                    <div class="inline-block px-4 py-1 rounded-full text-sm font-bold uppercase ${profileColor}">
+                        ${r.profile}
+                    </div>
+                </div>`;
             finalPayload['g' + r.grade] = r.profile;
         });
 
@@ -302,8 +467,14 @@
 
     async function sendToDatabase() {
         const btn = document.getElementById('db-btn');
-        btn.innerText = "UPLOADING TO DATABASE...";
+        const icon = document.getElementById('submit-icon');
+        const loader = document.getElementById('submit-loader');
+        const msg = document.getElementById('submit-message');
+
         btn.disabled = true;
+        icon.classList.add('hidden');
+        loader.classList.remove('hidden');
+        msg.classList.add('hidden');
 
         const formData = new URLSearchParams();
         for (let key in finalPayload) {
@@ -311,19 +482,32 @@
         }
 
         try {
+            // Using no-cors as per standard Apps Script deployment limitations in webapps
             await fetch(FINAL_GS_LINK, {
                 method: 'POST',
                 mode: 'no-cors', 
                 body: formData.toString(),
                 headers: { "Content-Type": "application/x-www-form-urlencoded" }
             });
-            btn.innerText = "SUCCESS! RETURNING TO HOME...";
-            btn.style.background = "#6c757d";
-            setTimeout(() => location.reload(), 3000);
+            
+            // Success State
+            msg.innerText = "Results successfully recorded in the PHI-IRI Database!";
+            msg.classList.remove('hidden');
+            msg.classList.add('bg-green-100', 'text-green-800');
+            
+            btn.innerHTML = "Success! Returning Home...";
+            btn.classList.replace('btn-primary', 'bg-gray-500');
+            
+            setTimeout(() => location.reload(), 4000);
         } catch (e) {
-            alert("Connection error. Please check internet and try again.");
-            btn.innerText = "RETRY SENDING";
+            msg.innerText = "Network Error. Please check your connection and try again.";
+            msg.classList.remove('hidden');
+            msg.classList.add('bg-red-100', 'text-red-800');
+            
             btn.disabled = false;
+            icon.classList.remove('hidden');
+            loader.classList.add('hidden');
+            showModal("Upload Failed", "We couldn't connect to the database. Please check your internet and click 'Retry'.");
         }
     }
 </script>
