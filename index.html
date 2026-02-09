@@ -20,10 +20,7 @@
             color: #1f2937;
         }
 
-        .comic-font {
-            font-family: 'Comic Neue', cursive;
-        }
-
+        .comic-font { font-family: 'Comic Neue', cursive; }
         .bg-vmhs-blue { background-color: var(--vmhs-blue); }
         .text-vmhs-blue { color: var(--vmhs-blue); }
         .border-vmhs-blue { border-color: var(--vmhs-blue); }
@@ -39,10 +36,7 @@
             background-color: #0d2b7a;
             transform: translateY(-1px);
         }
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .passage-box {
             background: white;
@@ -52,42 +46,46 @@
             overflow-y: auto;
         }
 
-        .option-card {
-            border: 2px solid #e5e7eb;
-            transition: all 0.2s ease;
+        .option-card { border: 2px solid #e5e7eb; transition: all 0.2s ease; cursor: pointer; }
+        .option-card:hover { border-color: var(--vmhs-blue); background-color: var(--vmhs-light); }
+        .option-card.selected { border-color: #ef4444; background-color: #fee2e2; }
+
+        /* Navigation Circle Styles */
+        .nav-btn {
+            width: 35px; height: 35px; border-radius: 50%; border: 2px solid #dadce0;
+            background: white; font-weight: bold; display: flex; align-items: center;
+            justify-content: center; transition: 0.2s; cursor: pointer;
         }
-        .option-card:hover {
-            border-color: var(--vmhs-blue);
-            background-color: var(--vmhs-light);
-            transform: translateX(4px);
+        .nav-btn.active { border-color: var(--vmhs-blue); background-color: var(--vmhs-light); color: var(--vmhs-blue); }
+        .nav-btn.answered { background-color: #ef4444; border-color: #b91c1c; color: white; }
+
+        /* Speaker Icon Styles */
+        .speak-btn { 
+            background: var(--vmhs-gold); border: none; border-radius: 50%; 
+            width: 40px; height: 40px; cursor: pointer; margin-right: 15px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 18px; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
         }
+        .speak-btn:hover { transform: scale(1.1); background: #e6c200; }
+        .flex-row-audio { display: flex; align-items: flex-start; margin-bottom: 15px; }
+        .opt-row-audio { display: flex; align-items: center; width: 100%; margin-bottom: 8px; }
 
         .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--vmhs-blue);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
+            border: 4px solid #f3f3f3; border-top: 4px solid var(--vmhs-blue);
+            border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;
         }
-
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4 md:p-8">
 
     <div class="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden mb-8">
-        <!-- Header Section -->
         <div class="p-6 text-center border-b-4 border-vmhs-blue">
             <div class="flex flex-col items-center">
                 <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4 overflow-hidden border-2 border-gray-200">
-                    <!-- Fallback if image fails -->
                     <img src="VMHS_LOGO.jpg" alt="VMHS Logo" onerror="this.innerHTML='LOGO'; this.classList.add('p-4','text-xs','text-gray-400')" class="object-contain w-full h-full">
                 </div>
                 <h1 class="text-2xl md:text-3xl font-bold text-vmhs-blue uppercase tracking-tight">V. Mapa High School</h1>
@@ -97,128 +95,62 @@
             </div>
         </div>
 
-        <!-- Dynamic Content Area -->
         <div class="p-6 md:p-10">
-            
-            <!-- Setup Page -->
             <div id="setup-page" class="space-y-6">
                 <div class="flex items-center gap-2 mb-4">
                     <div class="w-2 h-8 bg-vmhs-blue rounded-full"></div>
                     <h2 class="text-xl font-bold text-gray-800 uppercase">Student Information</h2>
                 </div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase">LRN No.</label><input type="text" id="lrn" maxlength="12" class="w-full p-3 border rounded-xl outline-none" placeholder="12-digit LRN"></div>
+                    <div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase">Surname</label><input type="text" id="surname" class="w-full p-3 border rounded-xl outline-none"></div>
+                    <div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase">First Name</label><input type="text" id="firstName" class="w-full p-3 border rounded-xl outline-none"></div>
+                    <div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase">M.I.</label><input type="text" id="mi" maxlength="2" class="w-full p-3 border rounded-xl outline-none"></div>
                     <div class="space-y-1">
-                        <label class="text-xs font-bold text-gray-500 uppercase">LRN No.</label>
-                        <input type="text" id="lrn" maxlength="12" placeholder="12-digit LRN" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs font-bold text-gray-500 uppercase">Surname</label>
-                        <input type="text" id="surname" placeholder="Enter Surname" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs font-bold text-gray-500 uppercase">First Name</label>
-                        <input type="text" id="firstName" placeholder="Enter First Name" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs font-bold text-gray-500 uppercase">M.I.</label>
-                        <input type="text" id="mi" maxlength="2" placeholder="Ex: M." class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs font-bold text-gray-500 uppercase">Grade Level (Enrollment)</label>
-                        <select id="studentGrade" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                            <option value="7">Grade 7</option>
-                            <option value="8">Grade 8</option>
-                            <option value="9">Grade 9</option>
-                            <option value="10">Grade 10</option>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Grade Level</label>
+                        <select id="studentGrade" class="w-full p-3 border rounded-xl bg-white outline-none">
+                            <option value="7">Grade 7</option><option value="8">Grade 8</option><option value="9">Grade 9</option><option value="10">Grade 10</option>
                         </select>
                     </div>
-                    <div class="space-y-1">
-                        <label class="text-xs font-bold text-gray-500 uppercase">Section</label>
-                        <input type="text" id="section" placeholder="Enter Section" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
+                    <div class="space-y-1"><label class="text-xs font-bold text-gray-500 uppercase">Section</label><input type="text" id="section" class="w-full p-3 border rounded-xl outline-none"></div>
                 </div>
-
-                <div id="setup-error" class="hidden text-red-600 text-sm font-semibold bg-red-50 p-3 rounded-lg border border-red-200"></div>
-
-                <button class="btn-primary w-full py-4 rounded-2xl font-bold uppercase tracking-widest mt-4 shadow-lg" onclick="autoStartExam()">
-                    Start Assessment
-                </button>
+                <button class="btn-primary w-full py-4 rounded-2xl font-bold uppercase tracking-widest mt-4 shadow-lg" onclick="autoStartExam()">Start Assessment</button>
             </div>
 
-            <!-- Transition Step -->
             <div id="transition-step" class="hidden flex flex-col items-center justify-center py-12 space-y-6">
                 <div class="loader"></div>
                 <div class="text-center">
                     <h3 class="text-2xl font-bold text-vmhs-blue">Analyzing Performance...</h3>
-                    <p id="transition-msg" class="text-gray-500 font-medium mt-2">Adjusting level based on results.</p>
+                    <p id="transition-msg" class="text-gray-500 font-medium mt-2"></p>
                 </div>
             </div>
 
-            <!-- Test Step -->
             <div id="test-step" class="hidden space-y-6">
+                <div id="question-nav" class="flex flex-wrap gap-2 justify-center mb-4"></div>
                 <div class="flex justify-between items-center mb-2">
                     <span id="step-indicator" class="text-xs font-bold text-vmhs-blue uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full border border-blue-100"></span>
                     <span id="part-label" class="text-sm font-bold text-gray-600"></span>
                 </div>
-
                 <div id="passage-reference" class="passage-box comic-font p-6 rounded-2xl text-lg leading-relaxed whitespace-pre-wrap"></div>
+                <div id="quiz-area" class="space-y-4"></div>
                 
-                <div id="quiz-area" class="space-y-4">
-                    <!-- Questions injected here -->
+                <div class="flex gap-4 mt-6">
+                    <button id="prev-btn" class="flex-1 py-4 rounded-xl font-bold bg-gray-200 text-gray-700" onclick="prevQuestion()">Previous</button>
+                    <button id="next-btn" class="flex-1 py-4 rounded-xl font-bold btn-primary" onclick="handleNext()">Next Question</button>
                 </div>
             </div>
 
-            <!-- Results Step -->
             <div id="results-step" class="hidden">
-                <div class="text-center mb-10">
-                    <h2 class="text-3xl font-bold text-vmhs-blue">Assessment Complete</h2>
-                    <p class="text-gray-500 mt-2">Here is the summary of your reading profile.</p>
-                </div>
-
-                <div id="cumulative-results" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                    <!-- Result cards injected here -->
-                </div>
-
-                <div id="submit-message" class="hidden mb-6 p-4 rounded-xl text-center font-medium"></div>
-
-                <button id="db-btn" class="btn-primary w-full py-5 rounded-2xl font-bold uppercase tracking-widest shadow-lg flex items-center justify-center gap-3" onclick="sendToDatabase()">
-                    <span>Send to PHIL-IRI Database</span>
-                    <svg id="submit-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                    <div id="submit-loader" class="hidden loader !w-5 !h-5 !border-2"></div>
-                </button>
+                <div class="text-center mb-10"><h2 class="text-3xl font-bold text-vmhs-blue">Assessment Complete</h2></div>
+                <div id="cumulative-results" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"></div>
+                <button id="db-btn" class="btn-primary w-full py-5 rounded-2xl font-bold uppercase tracking-widest shadow-lg" onclick="sendToDatabase()">Send to PHIL-IRI Database</button>
             </div>
-
-        </div>
-    </div>
-
-    <!-- Footer Area -->
-    <div class="w-full max-w-4xl text-center space-y-2 text-[10px] md:text-xs text-gray-500 border-t border-gray-200 pt-6 px-4 mb-8">
-        <p class="font-bold text-vmhs-blue uppercase">Research & Development Team</p>
-        <p>Dianne M. Maure • Giezel P. Busa • Isiash Cassius B. Santiago</p>
-        <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 mt-2 font-medium">
-            <span><strong>Viber:</strong> +639-XXXX-XXXX</span>
-            <span><strong>Email:</strong> ahsprojectfriend@gmail.com</span>
-        </div>
-        <p class="italic mt-3 max-w-2xl mx-auto opacity-70">
-            Privacy Disclosure: In compliance with the Data Privacy Act of 2012, all collected student information (LRN, names, and scores) is processed solely for academic assessment and internal school records.
-        </p>
-    </div>
-
-    <!-- Custom Message Overlay (Replacing alert) -->
-    <div id="modal-overlay" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
-            <h3 id="modal-title" class="text-lg font-bold text-gray-900 mb-2">Message</h3>
-            <p id="modal-text" class="text-gray-600 mb-6"></p>
-            <button onclick="closeModal()" class="w-full py-3 bg-gray-900 text-white rounded-xl font-bold">Close</button>
         </div>
     </div>
 
 <script>
-    // Configuration
-    const FINAL_GS_LINK = "https://script.google.com/macros/s/AKfycbzAVD1jS6PDQrn_ua99Mm8f7CqPgBo_6thdLc-2zCWrJnj1Gow4gSwA2wf6BXyotgR8/exec";
+    // Replace with your Google Apps Script URL if you deploy your own
+    const FINAL_GS_LINK = "https://script.google.com/macros/s/AKfycbzz74XaT7TIhd7t91Z40oCiba-jFKBlbc_Gi7EiqxAXp4ki1FyAyogGExBV72jU9ImN/exec";
 
     const examData = {
         4: { title: "MARIAN'S EXPERIMENT", text: "Marian came home from school. She went to the kitchen and saw her mother cooking. 'Mama, do we have mongo seeds?' asked Marian. 'I will do an experiment.' \n\n'Yes, we have some in the cabinet,' answered Mama. \n\nMarian got some seeds and planted them in a wooden box. She watered the seeds every day. She made sure they got enough sun. After three days, Marian was happy to see stems and leaves sprouting. Her mongo seeds grew into young plants.", questions: [
@@ -248,7 +180,7 @@
             { q: "Many asteroids must have collided with one another. What is a synonym of the word 'collided'?", options: ["a. trapped into", "b. crashed into", "c. converged with", "d. connected with"], correct: 1 },
             { q: "If you see faint flashes of light in the night sky, which of the following could have happened?", options: ["a. Flames shoot up from the sun and come closer to the earth.", "b. Meteoroids have just crossed the earth's orbit and burned.", "c. Meteoroids have just crossed paths with the sun and burned.", "d. There are moments when the earth orbits a lot closer to the sun."], correct: 1 }
         ] },
-        7: { title: "THE JEEPNEY: A FILIPINO TRADITION", text: "The jeepney is a popular means for people to travel in the Philippines. After World War II, Filipinos changed the old jeeps left by American soldiers into public vehicles. Today, these brightly colored jeepneys ply every street of the Philippines. Its design is a constant reminder of the Filipinos’ creativity and resourcefulness.\n\nNot only that it is a sight to behold, these jeepneys have been so useful to the mass of Filipinos ever since its inception as a public vehicle. As proof, all throughout the Philippines, there are designated routes and numerous locations for passengers to board and disembark. It’s another thing to be inside the jeepneys. Passengers sit facing each other, making conversations more enjoyable. Hence, for many Filipinos, riding the jeepneys offers them time to socialize conveniently with one another, especially in cities where traffic is unbearable.\n\nHowever, the Filipinos’ beloved jeepney is in danger of being off the road in the near future. According to the government, they want to make the jeepneys safer and better for the environment. They plan to replace old jeepneys with new ones that use electricity or less fuel. The drivers are worried because they might not have enough money to buy these new vehicles as they are more expensive than the old jeepneys.\n\nEven with this threat, the jeepney remains an important part of every Filipino’s life. Long after the Americans have left Philippine soil, its practicality and usefulness continue. People use jeepneys for varied reasons: to go around, visit friends and relatives, go to work, and see new places. It is hard to imagine how life can go on for an ordinary Filipino without the jeepneys. The plan to replace them should be thoughtfully considered.", questions: [
+        7: { title: "THE JEEPNEY: A FILIPINO TRADITION", text: "The jeepney is a popular means for people to travel in the Philippines. After World War II, Filipinos changed the old jeeps left by American soldiers into public vehicles. Today, these brightly colored jeepneys ply every street of the Philippines. Its design is a constant reminder of the Filipinos’ creativity and resourcefulness.\n\nNot only that it is a sight to behold, these jeepneys have been so useful to the mass of Filipinos ever since its inception as a public vehicle...", questions: [
             { q: "Which of the following is implied in the first paragraph?", options: ["A. One of the things that Filipinos love to do is travelling.", "B. The American soldiers are very generous.", "C. The Filipino version of the jeepney is more creative.", "D. The jeepney is an original product of the Americans."], correct: 2 },
             { q: "What does “disembark” mean in the sentence?", options: ["A. To book for a vehicle", "B. To get into a vehicle", "C. To get off a vehicle", "D. To wait for a vehicle"], correct: 2 },
             { q: "What can cause traffic to be unbearable?", options: ["A. When passengers are not facing each other", "B. When there is no one to talk to while travelling", "C. When there is no time to socialize", "D. When vehicles are either slow or not moving"], correct: 3 },
@@ -260,7 +192,7 @@
             { q: "What is the purpose of the last paragraph?", options: ["A. To convince people to disagree with the government’s plan", "B. To emphasize the important role of jeepneys in Filipinos’ lives", "C. To enumerate the reasons why jeepneys are useful", "D. To inform people about what happened to the jeeps left by Americans"], correct: 1 },
             { q: "Which of the following best summarizes the selection?", options: ["A. Americans gave Filipinos their jeeps for public use", "B. Filipinos love jeepneys because they are safe", "C. The government will phase out jeepneys because they are unsafe", "D. The jeepney, a popular vehicle in the Philippines, is in danger of being phased out"], correct: 3 }
         ] },
-        8: { title: "THE IMPACT OF SOCIAL MEDIA ON COMMUNICATION", text: "Social media has changed the way we communicate with each other. It is like having a big town square where everyone can share news and stories instantly. Social media through the Internet has figuratively made the world smaller. All one needs is a gadget. It may be a smartphone, a tablet, or a laptop. Desktops can still be used. Through these devices, people can connect with friends and family members who may be on the far side of the globe.\n\nWhat is even more amazing is that we can make friends from practically everywhere on the planet. It is relatively easy to find common interests because we can easily make exchanges. We can choose to chat or make video calls using a platform of our choice. There is Messenger, Viber, and WhatsApp, to name a few. Chatting has gone a long way since Yahoo Messenger and Skype. And if we want people to be updated about us, there is Facebook, Instagram, and X (formerly known as Twitter).\n\nPersonal communication is not the only one that has changed. Even businesses turn to social media and digital networks to promote and sell their products and to connect with prospective clients and business partners. The Internet becomes a convenient venue for posting business advertisements as it has a wider reach.\n\nBut we are always warned about the dangers of communicating through the Internet. The information that we share becomes public and can be re-shared in either a positive or negative way. We have heard and read about people who become victims of malicious sharing of photos and videos.\n\nWhile we enjoy the ease and convenience of communicating through social media, we should also be aware of these threats. Otherwise, there is always the possibility that we will be part of the statistics of those whose lives are destroyed by oversharing.", questions: [
+        8: { title: "THE IMPACT OF SOCIAL MEDIA ON COMMUNICATION", text: "Social media has changed the way we communicate with each other. It is like having a big town square where everyone can share news and stories instantly. Social media through the Internet has figuratively made the world smaller. All one needs is a gadget...", questions: [
             { q: "Why does social media “relatively make the world smaller”?", options: ["A. Family members can communicate anytime.", "B. People can use digital gadgets to communicate.", "C. One does not need to travel to meet people.", "D. We can share news and stories instantly."], correct: 2 },
             { q: "In the second paragraph, what does the word “exchanges” mean?", options: ["A. conversations", "B. pictures", "C. products", "D. videos"], correct: 0 },
             { q: "What technique did the author use in communicating the message?", options: ["A. By describing a series of events", "B. By giving examples of platforms", "C. By narrating events in a random manner", "D. By using ordinary and familiar terms"], correct: 3 },
@@ -272,7 +204,7 @@
             { q: "What is the general tone of this article?", options: ["A. Critical", "B. Didactic", "C. Scholarly", "D. Straightforward"], correct: 3 },
             { q: "What is the main purpose of the article?", options: ["A. To inform readers about increasing victims", "B. To persuade readers to be more careful", "C. To remind readers how social media influenced us", "D. To tell about ease and convenience"], correct: 1 }
         ] },
-        9: { title: "THE RISE OF AI IN EDUCATION", text: "Artificial Intelligence or AI refers to technologies and systems that can accomplish tasks that typically require human intelligence, such as understanding language, recognizing patterns, and solving problems. AI has brought both major opportunities and notable challenges within the education framework.\n\nPersonalized learning is AI’s main benefit. Students’ performances can be analyzed by an AI-based platform, which then determines their learning styles, strengths, and weaknesses and adjusts teaching strategies based on the evaluation. This is helpful when a student needs further preparation or additional lessons in subjects where they are struggling. This increases the effectiveness and inclusivity of education by enabling students to learn at their own pace. AI also saves teachers time by allowing them to automatically grade papers, manage calendars, and respond to basic student questions—tasks that would otherwise require a significant amount of their valuable time.\n\nThere are also disadvantages in using AI in teaching. Student dependence on AI may cause delays in developing critical and creative thinking as well as problem-solving skills. If AI provides solutions too quickly, students may miss out on the learning process. Moreover, AI lacks human emotional intelligence. It gives instant feedback but cannot provide encouragement, empathy, or understanding in the same way that a human teacher can.\n\nIt is common knowledge that AI has the ability to transform education through individualized instruction, adaptive assessments, and improved administrative efficiency. AI-powered technologies can assess large volumes of student data to customize learning paths and instructional materials, potentially increasing student engagement and academic performance. AI can also improve accessibility by offering real-time translation and accommodations for students with disabilities, thereby promoting inclusivity in learning environments around the world.\n\nDespite these advantages, the possible disadvantages and ethical concerns surrounding AI in education should not be ignored. Critics argue that excessive reliance on AI may reduce the value of human teachers, who play a vital role in facilitating face-to-face interactions essential for holistic education. Concerns such as data privacy, biased grading systems, and the digital divide—where not all students have equal access to AI tools—must also be addressed.\n\nDespite the challenges brought by AI in education, there are exciting possibilities. AI can enhance engagement through interactive tools, personalized learning experiences, and valuable data to improve instruction. The challenge lies in integrating AI in a way that complements rather than replaces the essential human aspects of teaching. Ultimately, the key is finding a balance between technological innovation and preserving the critical role teachers play in student growth.", questions: [
+        9: { title: "THE RISE OF AI IN EDUCATION", text: "Artificial Intelligence or AI refers to technologies and systems that can accomplish tasks that typically require human intelligence, such as understanding language, recognizing patterns, and solving problems. AI has brought both major opportunities and notable challenges within the education framework...", questions: [
             { q: "What is the meaning of the word “personalization”?", options: ["A. AI provides information about individual learning.", "B. AI saves teachers’ time.", "C. Students choose subjects they like.", "D. Students have more time to prepare."], correct: 0 },
             { q: "According to the selection, which teacher activity is facilitated by AI?", options: ["A. Developing curriculum", "B. Designing assessments", "C. Grading students’ assignments", "D. Teaching difficult topics"], correct: 2 },
             { q: "How does AI influence the teaching process?", options: ["A. Instructional decision-making", "B. Repetitive role", "C. Replaces teacher", "D. Eliminates classroom teaching"], correct: 3 },
@@ -284,110 +216,128 @@
             { q: "What is the general tone?", options: ["A. Didactic", "B. Objective", "C. Urgent", "D. Serious"], correct: 1 },
             { q: "Which is NOT discussed?", options: ["A. Efficiency", "B. Promoting inclusivity", "C. Hinder face-to-face learning", "D. How AI benefits struggling students"], correct: 3 }
         ] },
-        10: { title: "EXPLORING NON-MENDELIAN GENETICS", text: "Non-Mendelian genetics encompasses inheritance patterns that deviate from the traditional dominant and recessive allele framework established by Gregor Mendel through his experiments with pea plants. While Mendelian genetics laid the foundation for understanding heredity, many traits in living organisms exhibit more complex inheritance patterns. By exploring non-Mendelian concepts, we gain a deeper appreciation for the diversity of genetic traits present in nature.\n\nOne significant form of non-Mendelian inheritance is incomplete dominance. In this pattern, the offspring display a phenotype that is a blend of traits from both parents. For example, crossing a red flower (RR) with a white flower (WW) results in pink offspring (RW). This shows that neither allele is completely dominant, leading to an intermediate expression of traits.\n\nAnother non-Mendelian concept is codominance, which occurs when both alleles in a heterozygous individual are fully expressed. A well-known example can be seen in certain chicken breeds where black feathers (B) and white feathers (W) are codominant. When crossed, the offspring display both black and white feathers, demonstrating that both alleles contribute equally to the phenotype.\n\nPolygenic inheritance is another type of non-Mendelian inheritance in which multiple genes influence a single trait. Traits such as human height and skin color are controlled by several genes working together. This results in a wide range of phenotypes rather than distinct categories, illustrating the complexity of genetic inheritance beyond simple dominant-recessive relationships.\n\nAdditionally, extranuclear inheritance involves genes located outside the nucleus, primarily in mitochondria or chloroplasts. Mitochondrial DNA is inherited from the mother and can result in traits or diseases that do not follow Mendelian patterns. This type of inheritance helps explain certain genetic conditions passed down through maternal lines.\n\nUnderstanding non-Mendelian genetics is essential in fields such as medicine, agriculture, and evolutionary biology. Recognizing that some genetic traits and disorders arise from multiple genes rather than a single gene improves approaches to treatment, prevention, and research. Overall, non-Mendelian genetics enriches our understanding of heredity and explains the complexity and diversity of life.", questions: [
-            { q: "Diversity synonym?", options: ["A. concepts", "B. patterns", "C. types", "D. variety"], correct: 4 },
+        10: { title: "EXPLORING NON-MENDELIAN GENETICS", text: "Non-Mendelian genetics encompasses inheritance patterns that deviate from the traditional dominant and recessive allele framework established by Gregor Mendel through his experiments with pea plants...", questions: [
+            { q: "Diversity synonym?", options: ["A. concepts", "B. patterns", "C. types", "D. variety"], correct: 3 },
             { q: "Which is an example of codominance?", options: ["A. Black and white skin from both parents", "B. Blue eyes and curly hair from different parents", "C. Brown skin and tall height", "D. Diabetes from maternal line"], correct: 0 },
             { q: "Which is an example of incomplete dominance?", options: ["A. Black and white skin from both parents", "B. Blue eyes and curly hair from different parents", "C. Brown skin and tall height", "D. Diabetes from maternal line"], correct: 1 },
             { q: "Which is an example of extranuclear inheritance?", options: ["A. Black and white skin from both parents", "B. Blue eyes and curly hair from different parents", "C. Brown skin and tall height", "D. Diabetes from maternal line"], correct: 3 },
-            { q: "Which of the following is an example of codominance?", options: ["A. Black and white skin from both parents", "B. Blue eyes and curly hair from different parents", "C. Brown skin and tall height", "D. Diabetes from maternal line"], correct: 2 },
+            { q: "Which of the following is an example of codominance?", options: ["A. Black and white skin from both parents", "B. Blue eyes and curly hair from different parents", "C. Brown skin and tall height", "D. Diabetes from maternal line"], correct: 0 },
             { q: "What is the importance of knowing non-Mendelian genetics?", options: ["A. Challenges Mendel", "B. Disproves Mendel", "C. Expands Mendel", "D. Improves Mendel"], correct: 2 },
             { q: "What is the purpose of the selection?", options: ["A. Argue against Mendel", "B. Describe different patterns", "C. Inform about limitations", "D. Persuade readers to adopt"], correct: 1 },
             { q: "Which is NOT discussed?", options: ["A. Complexities", "B. Descriptions of specific conditions", "C. Examples", "D. Significance"], correct: 1 },
-            { q: "Which paragraph contains the topic sentence?", options: ["A. First paragraph", "B. Second paragraph", "C. Fourth paragraph", "D. Last paragraph"], correct: 3 },
+            { q: "Which paragraph contains the topic sentence?", options: ["A. First paragraph", "B. Second paragraph", "C. Fourth paragraph", "D. Last paragraph"], correct: 0 },
             { q: "How did the author organize ideas?", options: ["A. Comparing", "B. Describing characteristics", "C. Cause-and-effect", "D. Problems"], correct: 1 }
         ] }
     };
 
-    let sessionResults = [];
-    let queue = [];
-    let activeGrade;
-    let currentQIdx;
-    let currentScore;
-    let totalTestsInSequence = 1;
-    let finalPayload = {};
+    let sessionResults = [], queue = [], activeGrade, currentQIdx, currentScore, totalTestsInSequence = 1, finalPayload = {};
+    let currentAnswers = [];
+    let currentAudio = new Audio();
 
-    function showModal(title, text) {
-        document.getElementById('modal-title').innerText = title;
-        document.getElementById('modal-text').innerText = text;
-        document.getElementById('modal-overlay').classList.remove('hidden');
-    }
-
-    function closeModal() {
-        document.getElementById('modal-overlay').classList.add('hidden');
+    function playFile(fileName) {
+        currentAudio.pause();
+        currentAudio = new Audio(fileName);
+        currentAudio.play().catch(e => console.error("Could not find file: " + fileName));
     }
 
     function autoStartExam() {
         const lrn = document.getElementById('lrn').value.trim();
         const surname = document.getElementById('surname').value.trim();
         const first = document.getElementById('firstName').value.trim();
-        const error = document.getElementById('setup-error');
-        
-        error.classList.add('hidden');
-
-        if(lrn.length < 10) { 
-            error.innerText = "Please enter a valid 12-digit LRN.";
-            error.classList.remove('hidden');
-            return; 
+        if(lrn.length < 10 || !surname || !first) { 
+            alert("Please complete student information correctly."); return; 
         }
-        if(!surname || !first) {
-            error.innerText = "Please enter your Surname and First Name.";
-            error.classList.remove('hidden');
-            return;
-        }
-
         activeGrade = parseInt(document.getElementById('studentGrade').value);
         document.getElementById('setup-page').classList.add('hidden');
         runGradeSequence(activeGrade);
     }
 
     function runGradeSequence(level) {
-        activeGrade = level; 
-        currentQIdx = 0; 
-        currentScore = 0;
-        
+        activeGrade = level; currentQIdx = 0; currentScore = 0;
+        currentAnswers = new Array(examData[activeGrade].questions.length).fill(null);
         document.getElementById('transition-step').classList.add('hidden');
         document.getElementById('test-step').classList.remove('hidden');
-        
-        updateStepCounter();
-        loadQuestion();
+        generateNav(); updateStepCounter(); loadQuestion();
     }
 
-    function updateStepCounter() {
-        document.getElementById('step-indicator').innerText = `Assessment ${sessionResults.length + 1} of ${totalTestsInSequence}`;
+    function generateNav() {
+        const nav = document.getElementById('question-nav');
+        nav.innerHTML = examData[activeGrade].questions.map((_, i) => `<button id="nav-btn-${i}" class="nav-btn" onclick="jumpToQuestion(${i})">${i + 1}</button>`).join('');
+    }
+
+    function updateNavStyles() {
+        examData[activeGrade].questions.forEach((_, i) => {
+            const btn = document.getElementById(`nav-btn-${i}`);
+            if(btn) {
+                btn.classList.toggle('active', i === currentQIdx);
+                btn.classList.toggle('answered', currentAnswers[i] !== null);
+            }
+        });
     }
 
     function loadQuestion() {
-        const exam = examData[activeGrade]; 
-        const q = exam.questions[currentQIdx];
+        const exam = examData[activeGrade]; const q = exam.questions[currentQIdx];
+        const isAudioLevel = (activeGrade >= 4 && activeGrade <= 6);
+        document.getElementById('part-label').innerText = `Assessment: Grade ${activeGrade}`;
         
-        document.getElementById('part-label').innerText = `Grade ${activeGrade} Material: ${exam.title}`;
-        document.getElementById('passage-reference').innerText = exam.text;
-        
-        document.getElementById('quiz-area').innerHTML = `
-            <div class="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        let passageHtml = isAudioLevel 
+            ? `<div class="flex-row-audio">
+                <button class="speak-btn" onclick="playFile('audio/GRADE${activeGrade}.mp3')">🔊</button>
+                <div style="flex:1;">${exam.text}</div>
+               </div>`
+            : `<div>${exam.text}</div>`;
+        document.getElementById('passage-reference').innerHTML = passageHtml;
+
+        let quizHtml = `
+            <div class="space-y-4">
                 <div class="p-6 bg-vmhs-light rounded-2xl border-2 border-vmhs-blue/10">
-                    <p class="text-sm font-bold text-vmhs-blue mb-1">Question ${currentQIdx + 1} of ${exam.questions.length}</p>
-                    <h3 class="text-xl font-bold text-gray-800 leading-tight">${q.q}</h3>
+                    <div class="flex-row-audio">
+                        ${isAudioLevel ? `<button class="speak-btn" onclick="playFile('audio/G${activeGrade}Q${currentQIdx + 1}Q.mp3')">🔊</button>` : ''}
+                        <div>
+                            <p class="text-sm font-bold text-vmhs-blue mb-1">Question ${currentQIdx + 1} of ${exam.questions.length}</p>
+                            <h3 class="text-xl font-bold text-gray-800 leading-tight">${q.q}</h3>
+                        </div>
+                    </div>
                 </div>
                 <div class="grid grid-cols-1 gap-3">
-                    ${q.options.map((opt, i) => `
-                        <button class="option-card w-full p-4 rounded-xl text-left font-medium bg-white" onclick="handleChoice(${i})">
-                            ${opt}
-                        </button>
-                    `).join('')}
+                    ${q.options.map((opt, i) => {
+                        const letters = ['A', 'B', 'C', 'D'];
+                        const letter = letters[i];
+                        return `
+                        <div class="opt-row-audio">
+                            ${isAudioLevel ? `<button class="speak-btn" onclick="playFile('audio/G${activeGrade}Q${currentQIdx + 1}${letter}.mp3')">🔊</button>` : ''}
+                            <button class="option-card flex-1 p-4 rounded-xl text-left font-medium bg-white ${currentAnswers[currentQIdx] === i ? 'selected' : ''}" onclick="handleChoice(${i})">
+                                ${opt}
+                            </button>
+                        </div>`;
+                    }).join('')}
                 </div>
             </div>`;
         
-        document.getElementById('passage-reference').scrollTop = 0;
+        document.getElementById('quiz-area').innerHTML = quizHtml;
+        const nextBtn = document.getElementById('next-btn');
+        document.getElementById('prev-btn').style.visibility = currentQIdx === 0 ? 'hidden' : 'visible';
+        
+        if (currentQIdx === exam.questions.length - 1) {
+            nextBtn.innerText = "Submit Assessment";
+            nextBtn.disabled = currentAnswers.some(a => a === null);
+        } else {
+            nextBtn.innerText = "Next Question";
+            nextBtn.disabled = false;
+        }
+        updateNavStyles();
     }
 
-    function handleChoice(idx) {
-        if(idx === examData[activeGrade].questions[currentQIdx].correct) currentScore++;
-        currentQIdx++;
-        
-        if(currentQIdx < examData[activeGrade].questions.length) {
-            loadQuestion();
-        } else {
+    function handleChoice(idx) { currentAudio.pause(); currentAnswers[currentQIdx] = idx; loadQuestion(); }
+    function jumpToQuestion(i) { currentAudio.pause(); currentQIdx = i; loadQuestion(); }
+    function prevQuestion() { if(currentQIdx > 0) { currentAudio.pause(); currentQIdx--; loadQuestion(); } }
+
+    function handleNext() {
+        const exam = examData[activeGrade];
+        if(currentQIdx < exam.questions.length - 1) { currentQIdx++; loadQuestion(); } 
+        else {
+            currentScore = 0;
+            exam.questions.forEach((q, i) => { if(currentAnswers[i] === q.correct) currentScore++; });
             processResults();
         }
     }
@@ -395,33 +345,29 @@
     function processResults() {
         const total = examData[activeGrade].questions.length;
         const pct = (currentScore / total);
-        let profile = "Frustration";
-        if (pct >= 0.8) profile = "Independent";
-        else if (pct >= 0.59) profile = "Instructional";
-
+        let profile = (pct >= 0.8) ? "Independent" : (pct >= 0.59) ? "Instructional" : "Frustration";
         sessionResults.push({ grade: activeGrade, score: `${currentScore}/${total}`, profile: profile });
-
-        // Logic for branching based on FIRST test
+        
+        // Dynamic pathing based on Phil-IRI rules
         if (sessionResults.length === 1) {
-            if (profile === "Frustration") {
-                if (activeGrade - 3 >= 4) queue.push(activeGrade - 3);
-                if (activeGrade - 2 >= 4) queue.push(activeGrade - 2);
-                if (activeGrade - 1 >= 4) queue.push(activeGrade - 1);
-            } else if (profile === "Instructional") {
-                if (activeGrade - 1 >= 4) queue.push(activeGrade - 1);
-                if (activeGrade + 1 <= 10) queue.push(activeGrade + 1);
-            } else if (profile === "Independent") {
-                if (activeGrade + 1 <= 10) queue.push(activeGrade + 1);
-                if (activeGrade + 2 <= 10) queue.push(activeGrade + 2);
+            if (profile === "Frustration") { 
+                [activeGrade-3, activeGrade-2, activeGrade-1].forEach(g => { if(g >= 4) queue.push(g); }); 
+            }
+            else if (profile === "Instructional") { 
+                if(activeGrade-1 >= 4) queue.push(activeGrade-1); 
+                if(activeGrade+1 <= 10) queue.push(activeGrade+1); 
+            }
+            else { 
+                if(activeGrade+1 <= 10) queue.push(activeGrade+1); 
+                if(activeGrade+2 <= 10) queue.push(activeGrade+2); 
             }
             totalTestsInSequence = 1 + queue.length;
         }
-
-        if (queue.length > 0) {
-            const nextG = queue.shift();
-            showTransition(nextG);
-        } else {
-            showFinalReport();
+        
+        if (queue.length > 0) { 
+            showTransition(queue.shift()); 
+        } else { 
+            showFinalReport(); 
         }
     }
 
@@ -435,83 +381,63 @@
     function showFinalReport() {
         document.getElementById('test-step').classList.add('hidden');
         document.getElementById('results-step').classList.remove('hidden');
-        
         let html = "";
-        finalPayload = {
-            lrn: document.getElementById('lrn').value,
-            surname: document.getElementById('surname').value,
-            firstName: document.getElementById('firstName').value,
-            mi: document.getElementById('mi').value,
-            enrollmentGrade: document.getElementById('studentGrade').value,
-            section: document.getElementById('section').value,
-            timestamp: new Date().toISOString()
+        
+        // Prep payload for Google Sheets
+        finalPayload = { 
+            lrn: document.getElementById('lrn').value, 
+            surname: document.getElementById('surname').value, 
+            firstName: document.getElementById('firstName').value, 
+            mi: document.getElementById('mi').value, 
+            enrollmentGrade: document.getElementById('studentGrade').value, 
+            section: document.getElementById('section').value, 
+            timestamp: new Date().toLocaleString() 
         };
+        
+        // Initialize grade slots to empty
+        for(let i=4; i<=10; i++) finalPayload['g' + i] = "";
 
         sessionResults.forEach(r => {
-            const profileColor = r.profile === "Independent" ? "text-green-600 bg-green-50" : 
-                               r.profile === "Instructional" ? "text-blue-600 bg-blue-50" : "text-red-600 bg-red-50";
-            
-            html += `
-                <div class="p-6 bg-white border-2 border-gray-100 rounded-3xl shadow-sm text-center">
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Grade ${r.grade} Level</p>
-                    <div class="text-3xl font-black mb-1">${r.score}</div>
-                    <div class="inline-block px-4 py-1 rounded-full text-sm font-bold uppercase ${profileColor}">
-                        ${r.profile}
-                    </div>
-                </div>`;
+            const color = r.profile === "Independent" ? "text-green-600 bg-green-50" : r.profile === "Instructional" ? "text-blue-600 bg-blue-50" : "text-red-600 bg-red-50";
+            html += `<div class="p-6 bg-white border-2 border-gray-100 rounded-3xl shadow-sm text-center mb-4">
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Grade ${r.grade} Level</p>
+                        <div class="text-3xl font-black mb-1">${r.score}</div>
+                        <div class="inline-block px-4 py-1 rounded-full text-sm font-bold uppercase ${color}">${r.profile}</div>
+                    </div>`;
             finalPayload['g' + r.grade] = r.profile;
         });
-
         document.getElementById('cumulative-results').innerHTML = html;
     }
 
     async function sendToDatabase() {
         const btn = document.getElementById('db-btn');
-        const icon = document.getElementById('submit-icon');
-        const loader = document.getElementById('submit-loader');
-        const msg = document.getElementById('submit-message');
-
-        btn.disabled = true;
-        icon.classList.add('hidden');
-        loader.classList.remove('hidden');
-        msg.classList.add('hidden');
-
+        btn.disabled = true; btn.innerText = "SUBMITTING...";
+        
         const formData = new URLSearchParams();
-        for (let key in finalPayload) {
-            formData.append(key, finalPayload[key]);
-        }
-
+        for (let key in finalPayload) formData.append(key, finalPayload[key]);
+        
         try {
-            // Using no-cors as per standard Apps Script deployment limitations in webapps
-            await fetch(FINAL_GS_LINK, {
-                method: 'POST',
+            // mode 'no-cors' is used to prevent CORS errors with Google Apps Script
+            await fetch(FINAL_GS_LINK, { 
+                method: 'POST', 
                 mode: 'no-cors', 
-                body: formData.toString(),
-                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString() 
             });
             
-            // Success State
-            msg.innerText = "Results successfully recorded in the PHI-IRI Database!";
-            msg.classList.remove('hidden');
-            msg.classList.add('bg-green-100', 'text-green-800');
-            
-            btn.innerHTML = "Success! Returning Home...";
-            btn.classList.replace('btn-primary', 'bg-gray-500');
-            
-            setTimeout(() => location.reload(), 4000);
-        } catch (e) {
-            msg.innerText = "Network Error. Please check your connection and try again.";
-            msg.classList.remove('hidden');
-            msg.classList.add('bg-red-100', 'text-red-800');
-            
-            btn.disabled = false;
-            icon.classList.remove('hidden');
-            loader.classList.add('hidden');
-            showModal("Upload Failed", "We couldn't connect to the database. Please check your internet and click 'Retry'.");
+            btn.innerText = "SUCCESSFULLY SENT!";
+            btn.classList.replace('btn-primary', 'bg-green-600');
+            setTimeout(() => location.reload(), 3000);
+        } catch (e) { 
+            console.error(e);
+            btn.disabled = false; 
+            btn.innerText = "RETRY SUBMISSION"; 
         }
+    }
+
+    function updateStepCounter() { 
+        document.getElementById('step-indicator').innerText = `Assessment ${sessionResults.length + 1} of ${totalTestsInSequence}`; 
     }
 </script>
 </body>
 </html>
-
-
